@@ -13,6 +13,7 @@ export interface AppSettings {
   theme?: 'light' | 'dark' | 'auto' | 'paper';
   fontFamily?: 'sans' | 'serif' | 'mono';
   uiFontFamily?: 'sans' | 'serif' | 'mono';
+  fontSize?: number;
 }
 
 const STORAGE_DIR = 'JournalApp';

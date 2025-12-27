@@ -12,6 +12,7 @@ interface JournalState {
     theme: 'light' | 'dark' | 'auto' | 'paper';
     fontFamily: 'sans' | 'serif' | 'mono';
     uiFontFamily: 'sans' | 'serif' | 'mono';
+    fontSize: number;
 
     // Data State
     entries: JournalEntry[];
@@ -28,6 +29,7 @@ interface JournalState {
     setTheme: (theme: 'light' | 'dark' | 'auto' | 'paper') => void;
     setFontFamily: (font: 'sans' | 'serif' | 'mono') => void;
     setUiFontFamily: (font: 'sans' | 'serif' | 'mono') => void;
+    setFontSize: (size: number) => void;
     resetData: () => Promise<void>;
 
     loadEntries: () => Promise<void>;
@@ -47,6 +49,7 @@ export const useStore = create<JournalState>((set, get) => ({
     theme: 'auto',
     fontFamily: 'sans',
     uiFontFamily: 'sans',
+    fontSize: 16,
 
     // Data State
     entries: [],
@@ -72,12 +75,17 @@ export const useStore = create<JournalState>((set, get) => ({
     setFontFamily: (fontFamily) => {
         set({ fontFamily });
         const s = get();
-        StorageService.saveSettings({ viewMode: s.viewMode, theme: s.theme, fontFamily, uiFontFamily: s.uiFontFamily });
+        StorageService.saveSettings({ viewMode: s.viewMode, theme: s.theme, fontFamily, uiFontFamily: s.uiFontFamily, fontSize: s.fontSize });
     },
     setUiFontFamily: (uiFontFamily) => {
         set({ uiFontFamily });
         const s = get();
-        StorageService.saveSettings({ viewMode: s.viewMode, theme: s.theme, fontFamily: s.fontFamily, uiFontFamily });
+        StorageService.saveSettings({ viewMode: s.viewMode, theme: s.theme, fontFamily: s.fontFamily, uiFontFamily, fontSize: s.fontSize });
+    },
+    setFontSize: (fontSize) => {
+        set({ fontSize });
+        const s = get();
+        StorageService.saveSettings({ viewMode: s.viewMode, theme: s.theme, fontFamily: s.fontFamily, uiFontFamily: s.uiFontFamily, fontSize });
     },
     resetData: async () => {
         try {
@@ -117,6 +125,9 @@ export const useStore = create<JournalState>((set, get) => ({
                 }
                 if (settings?.uiFontFamily) {
                     set({ uiFontFamily: settings.uiFontFamily });
+                }
+                if (settings?.fontSize) {
+                    set({ fontSize: settings.fontSize });
                 }
 
                 const lastOpenedFilename = await StorageService.loadLastOpenedEntry();

@@ -1,4 +1,4 @@
-import { Modal, Stack, Text, Group, Divider, SegmentedControl, Center, Box, Button, Alert } from '@mantine/core';
+import { Modal, Stack, Text, Group, Divider, SegmentedControl, Center, Box, Button, Alert, Slider } from '@mantine/core';
 import { IconSun, IconMoon, IconDeviceDesktop, IconList, IconFileText, IconNotebook, IconLetterCase, IconAlertTriangle, IconTrash } from '@tabler/icons-react';
 import { useStore } from '../../store/useStore';
 import { useState } from 'react';
@@ -17,6 +17,8 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
     const setFontFamily = useStore(state => state.setFontFamily);
     const uiFontFamily = useStore(state => state.uiFontFamily);
     const setUiFontFamily = useStore(state => state.setUiFontFamily);
+    const fontSize = useStore(state => state.fontSize);
+    const setFontSize = useStore(state => state.setFontSize);
     const resetData = useStore(state => state.resetData);
 
     const [confirmDelete, setConfirmDelete] = useState(false);
@@ -90,6 +92,26 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
                                 ]}
                             />
                         </Group>
+
+                        <Box>
+                            <Text size="sm" mb={4}>Editor Font Size ({fontSize}px)</Text>
+                            <Slider
+                                value={fontSize}
+                                onChange={setFontSize}
+                                min={12}
+                                max={32}
+                                step={1}
+                                marks={[
+                                    { value: 12, label: '12' },
+                                    { value: 16, label: '16' },
+                                    { value: 20, label: '20' },
+                                    { value: 24, label: '24' },
+                                    { value: 28, label: '28' },
+                                    { value: 32, label: '32' },
+                                ]}
+                                mb="xl"
+                            />
+                        </Box>
                     </Stack>
                 </Box>
 

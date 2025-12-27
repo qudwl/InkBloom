@@ -15,6 +15,7 @@ function App() {
   const theme = useStore(state => state.theme);
   const fontFamily = useStore(state => state.fontFamily);
   const uiFontFamily = useStore(state => state.uiFontFamily);
+  const fontSize = useStore(state => state.fontSize);
   const { setColorScheme } = useMantineColorScheme();
 
   useEffect(() => {
@@ -30,7 +31,8 @@ function App() {
     document.body.setAttribute('data-theme', theme);
     document.body.setAttribute('data-font', fontFamily);
     document.body.setAttribute('data-ui-font', uiFontFamily);
-  }, [theme, fontFamily, uiFontFamily, setColorScheme]);
+    document.body.style.setProperty('--journal-font-size', `${fontSize}px`);
+  }, [theme, fontFamily, uiFontFamily, fontSize, setColorScheme]);
 
   return (
     <AppShell

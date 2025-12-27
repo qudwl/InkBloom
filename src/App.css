@@ -113,6 +113,7 @@ body,
 .bn-editor,
 .bn-block-content {
   font-family: var(--journal-font) !important;
+  font-size: var(--journal-font-size) !important;
 }
 
 /* Editor adjustments */
