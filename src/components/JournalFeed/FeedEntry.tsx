@@ -10,9 +10,10 @@ interface FeedEntryProps {
     onSaveGlobal?: (filename: string, content: string) => Promise<void>;
     expanded?: boolean;
     hideHeader?: boolean;
+    plain?: boolean;
 }
 
-export function FeedEntry({ entry, isHighlighted, onSelect, onSaveGlobal, expanded, hideHeader }: FeedEntryProps) {
+export function FeedEntry({ entry, isHighlighted, onSelect, onSaveGlobal, expanded, hideHeader, plain }: FeedEntryProps) {
     const [content, setContent] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -58,17 +59,18 @@ export function FeedEntry({ entry, isHighlighted, onSelect, onSaveGlobal, expand
 
     return (
         <Paper
-            shadow="xs"
-            p="xl"
-            withBorder
-            mb={expanded ? 0 : "xl"}
+            shadow={plain ? "none" : "xs"}
+            p={plain ? 0 : "xl"}
+            withBorder={!plain}
+            mb={plain || expanded ? 0 : "xl"}
+            bg={plain ? "transparent" : undefined}
             style={{
                 transition: 'border-color 0.3s',
-                borderColor: isHighlighted ? 'var(--mantine-primary-color)' : undefined
+                borderColor: !plain && isHighlighted ? 'var(--mantine-primary-color)' : undefined
             }}
-            onClick={() => onSelect?.(entry)}
+            onClick={() => !plain && onSelect?.(entry)}
         >
-            {!hideHeader && (
+            {!hideHeader && !isHighlighted && (
                 <Box mb="md">
                     <Title order={3}>{entry.displayName}</Title>
                     <Text size="sm" c="dimmed">
@@ -89,7 +91,7 @@ export function FeedEntry({ entry, isHighlighted, onSelect, onSaveGlobal, expand
                     <Loader size="sm" type="dots" />
                 </Group>
             ) : (
-                <div style={{ minHeight: '200px' }}>
+                <div>
                     <Editor
                         key={entry.filename}
                         initialContent={content || undefined}

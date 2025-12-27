@@ -1,4 +1,4 @@
-import { AppShell } from '@mantine/core';
+import { AppShell, useMantineColorScheme } from '@mantine/core';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { JournalFeed } from './components/JournalFeed';
@@ -12,10 +12,25 @@ function App() {
   const mobileOpened = useStore(state => state.mobileOpened);
   const loadEntries = useStore(state => state.loadEntries);
   const viewMode = useStore(state => state.viewMode);
+  const theme = useStore(state => state.theme);
+  const fontFamily = useStore(state => state.fontFamily);
+  const uiFontFamily = useStore(state => state.uiFontFamily);
+  const { setColorScheme } = useMantineColorScheme();
 
   useEffect(() => {
     loadEntries();
   }, []);
+
+  useEffect(() => {
+    if (theme === 'paper') {
+      setColorScheme('light');
+    } else {
+      setColorScheme(theme as 'light' | 'dark' | 'auto');
+    }
+    document.body.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-font', fontFamily);
+    document.body.setAttribute('data-ui-font', uiFontFamily);
+  }, [theme, fontFamily, uiFontFamily, setColorScheme]);
 
   return (
     <AppShell
@@ -26,14 +41,22 @@ function App() {
       }}
       padding="md"
     >
-      <AppShell.Navbar p="md">
+      <AppShell.Navbar>
         <Sidebar />
       </AppShell.Navbar>
 
       <AppShell.Main pt={0}>
         <Header />
 
-        <div style={{ maxWidth: 800, margin: '0 auto', padding: 'var(--mantine-spacing-md)' }}>
+        <div
+          className="app-content-wrapper"
+          style={{
+            maxWidth: viewMode === 'feed' ? 800 : '100%',
+            margin: '0 auto',
+            padding: 'var(--mantine-spacing-md)',
+            minHeight: 'calc(100vh - 80px)' // Ensure it fills area
+          }}
+        >
           {viewMode === 'feed' ? <JournalFeed /> : <SingleEntryView />}
         </div>
       </AppShell.Main>

@@ -16,3 +16,110 @@
   padding-top: 2rem !important;
   padding-bottom: 2rem !important;
 }
+
+/* Hide scrollbars globally */
+* {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
+}
+
+.mantine-ScrollArea-viewport {
+  scrollbar-width: none !important;
+}
+
+.mantine-ScrollArea-viewport::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Paper Theme Styles */
+[data-theme="paper"] {
+  --mantine-color-body: #fdfaf3;
+  --mantine-color-text: #433422;
+  --mantine-color-default-border: #e8dfcf;
+  --mantine-color-default-hover: #f3e9d8;
+  --mantine-primary-color: #8b6e4b;
+}
+
+[data-theme="paper"] body {
+  background-color: #fdfaf3;
+  color: #433422;
+}
+
+[data-theme="paper"] .mantine-AppShell-navbar {
+  background-color: #f8f1e5;
+  border-right: 1px solid #e8dfcf;
+}
+
+[data-theme="paper"] .mantine-AppShell-header,
+[data-theme="paper"] .mantine-AppShell-main>div:first-child {
+  background-color: #fdfaf3 !important;
+  border-bottom: 1px solid #e8dfcf;
+}
+
+/* Smooth transitions */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mantine-AppShell-navbar,
+.mantine-AppShell-main,
+.mantine-Paper-root {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Font Family Definitions (Journal Editor) */
+[data-font="sans"] {
+  --journal-font: var(--mantine-font-family);
+}
+
+[data-font="serif"] {
+  --journal-font: "Georgia", "Times New Roman", serif;
+}
+
+[data-font="mono"] {
+  --journal-font: var(--mantine-font-family-mono);
+}
+
+/* UI Font Family Definitions */
+[data-ui-font="sans"] {
+  --ui-font: var(--mantine-font-family);
+}
+
+[data-ui-font="serif"] {
+  --ui-font: "Georgia", "Times New Roman", serif;
+}
+
+[data-ui-font="mono"] {
+  --ui-font: var(--mantine-font-family-mono);
+}
+
+/* Application-wide Font Rules */
+:root,
+body,
+.mantine-Text-root,
+.mantine-Title-root,
+.mantine-Button-root,
+.mantine-UnstyledButton-root {
+  font-family: var(--ui-font) !important;
+}
+
+.bn-editor,
+.bn-block-content {
+  font-family: var(--journal-font) !important;
+}
+
+/* Editor adjustments */
+.bn-editor {
+  background-color: transparent !important;
+}
+
+[data-theme="paper"] .bn-block-content {
+  color: #433422 !important;
+}

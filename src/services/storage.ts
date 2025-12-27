@@ -10,6 +10,9 @@ export interface JournalEntry {
 
 export interface AppSettings {
   viewMode?: 'feed' | 'single';
+  theme?: 'light' | 'dark' | 'auto' | 'paper';
+  fontFamily?: 'sans' | 'serif' | 'mono';
+  uiFontFamily?: 'sans' | 'serif' | 'mono';
 }
 
 const STORAGE_DIR = 'JournalApp';
@@ -136,6 +139,16 @@ export class StorageService {
       return await readTextFile(`${STORAGE_DIR}/.last_opened`, { baseDir: BaseDirectory.Document });
     } catch {
       return null;
+    }
+  }
+
+  static async deleteAllEntries(): Promise<void> {
+    await this.ensureDir();
+    const entries = await readDir(STORAGE_DIR, { baseDir: BaseDirectory.Document });
+    for (const entry of entries) {
+      if (entry.name !== 'settings.json') {
+        await remove(`${STORAGE_DIR}/${entry.name}`, { baseDir: BaseDirectory.Document, recursive: true });
+      }
     }
   }
 

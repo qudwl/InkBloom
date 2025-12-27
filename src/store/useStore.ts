@@ -9,6 +9,9 @@ interface JournalState {
     mobileOpened: boolean;
     sortOrder: SortOption;
     viewMode: 'feed' | 'single';
+    theme: 'light' | 'dark' | 'auto' | 'paper';
+    fontFamily: 'sans' | 'serif' | 'mono';
+    uiFontFamily: 'sans' | 'serif' | 'mono';
 
     // Data State
     entries: JournalEntry[];
@@ -22,6 +25,10 @@ interface JournalState {
     closeMobile: () => void;
     setSortOrder: (order: SortOption) => void;
     setViewMode: (mode: 'feed' | 'single') => void;
+    setTheme: (theme: 'light' | 'dark' | 'auto' | 'paper') => void;
+    setFontFamily: (font: 'sans' | 'serif' | 'mono') => void;
+    setUiFontFamily: (font: 'sans' | 'serif' | 'mono') => void;
+    resetData: () => Promise<void>;
 
     loadEntries: () => Promise<void>;
     createEntry: () => Promise<void>;
@@ -37,6 +44,9 @@ export const useStore = create<JournalState>((set, get) => ({
     mobileOpened: false,
     sortOrder: 'date-desc',
     viewMode: 'feed',
+    theme: 'auto',
+    fontFamily: 'sans',
+    uiFontFamily: 'sans',
 
     // Data State
     entries: [],
@@ -51,7 +61,39 @@ export const useStore = create<JournalState>((set, get) => ({
     setSortOrder: (order) => set({ sortOrder: order }),
     setViewMode: (mode) => {
         set({ viewMode: mode });
-        StorageService.saveSettings({ viewMode: mode });
+        const s = get();
+        StorageService.saveSettings({ viewMode: mode, theme: s.theme, fontFamily: s.fontFamily, uiFontFamily: s.uiFontFamily });
+    },
+    setTheme: (theme) => {
+        set({ theme });
+        const s = get();
+        StorageService.saveSettings({ viewMode: s.viewMode, theme, fontFamily: s.fontFamily, uiFontFamily: s.uiFontFamily });
+    },
+    setFontFamily: (fontFamily) => {
+        set({ fontFamily });
+        const s = get();
+        StorageService.saveSettings({ viewMode: s.viewMode, theme: s.theme, fontFamily, uiFontFamily: s.uiFontFamily });
+    },
+    setUiFontFamily: (uiFontFamily) => {
+        set({ uiFontFamily });
+        const s = get();
+        StorageService.saveSettings({ viewMode: s.viewMode, theme: s.theme, fontFamily: s.fontFamily, uiFontFamily });
+    },
+    resetData: async () => {
+        try {
+            set({ isLoading: true });
+            await StorageService.deleteAllEntries();
+            set({
+                entries: [],
+                currentEntry: null,
+                initialLoadDone: false // Force re-initialization
+            });
+            await get().loadEntries();
+        } catch (error) {
+            console.error('[Store] Failed to reset data:', error);
+        } finally {
+            set({ isLoading: false });
+        }
     },
 
     loadEntries: async () => {
@@ -66,6 +108,15 @@ export const useStore = create<JournalState>((set, get) => ({
                 const settings = await StorageService.loadSettings();
                 if (settings?.viewMode) {
                     set({ viewMode: settings.viewMode });
+                }
+                if (settings?.theme) {
+                    set({ theme: settings.theme });
+                }
+                if (settings?.fontFamily) {
+                    set({ fontFamily: settings.fontFamily });
+                }
+                if (settings?.uiFontFamily) {
+                    set({ uiFontFamily: settings.uiFontFamily });
                 }
 
                 const lastOpenedFilename = await StorageService.loadLastOpenedEntry();

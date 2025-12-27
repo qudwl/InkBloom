@@ -1,7 +1,9 @@
-import { Stack, ScrollArea, Text, Group, ActionIcon, Menu } from '@mantine/core';
-import { IconSortDescending, IconSortAscending, IconCalendar, IconAlphabetLatin, IconX } from '@tabler/icons-react';
+import { Stack, ScrollArea, Text, Group, ActionIcon, Menu, UnstyledButton, rem, Box } from '@mantine/core';
+import { IconSortDescending, IconSortAscending, IconCalendar, IconAlphabetLatin, IconX, IconSettings } from '@tabler/icons-react';
 import { SidebarEntry } from './SidebarEntry';
 import { useStore, useSortedEntries } from '../../store/useStore';
+import { useDisclosure } from '@mantine/hooks';
+import { SettingsModal } from '../SettingsModal';
 
 export function Sidebar() {
     const entries = useSortedEntries();
@@ -15,6 +17,7 @@ export function Sidebar() {
     const setSortOrder = useStore(state => state.setSortOrder);
     const closeMobile = useStore(state => state.closeMobile);
     const mobileOpened = useStore(state => state.mobileOpened);
+    const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false);
 
     const handleSelect = (entry: any) => {
         selectEntry(entry);
@@ -22,15 +25,18 @@ export function Sidebar() {
     };
 
     return (
-        <ScrollArea h="100%">
-            <Stack gap="xs" p="md">
-                <Group
-                    justify="space-between"
-                    mb="xs"
-                    h={50}
-                    style={{ marginTop: -10 }}
-                >
-                    <Text size="sm" c="dimmed" fw={500}>
+        <Stack h="100%" gap={0}>
+            <Box
+                px="md"
+                h={80}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderBottom: '1px solid var(--mantine-color-default-border)',
+                }}
+            >
+                <Group justify="space-between" flex={1}>
+                    <Text size="sm" c="dimmed" fw={600} style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         Journal Entries
                     </Text>
                     <Group gap={4}>
@@ -86,22 +92,48 @@ export function Sidebar() {
                         </ActionIcon>
                     </Group>
                 </Group>
-                {entries.length === 0 && (
-                    <Text size="xs" c="dimmed">
-                        No entries yet.
-                    </Text>
-                )}
-                {entries.map((entry) => (
-                    <SidebarEntry
-                        key={entry.filename}
-                        entry={entry}
-                        isSelected={currentEntry?.filename === entry.filename}
-                        onSelect={handleSelect}
-                        onRename={renameEntry}
-                        onDelete={deleteEntry}
-                    />
-                ))}
-            </Stack>
-        </ScrollArea>
+            </Box>
+
+            <ScrollArea flex={1}>
+                <Stack gap="xs" p="md" pt="sm">
+                    {entries.length === 0 && (
+                        <Text size="xs" c="dimmed" p="md">
+                            No entries yet.
+                        </Text>
+                    )}
+                    {entries.map((entry) => (
+                        <SidebarEntry
+                            key={entry.filename}
+                            entry={entry}
+                            isSelected={currentEntry?.filename === entry.filename}
+                            onSelect={handleSelect}
+                            onRename={renameEntry}
+                            onDelete={deleteEntry}
+                        />
+                    ))}
+                </Stack>
+            </ScrollArea>
+
+            <Box p="md" style={{ borderTop: '1px solid var(--mantine-color-default-border)' }}>
+                <UnstyledButton
+                    onClick={openSettings}
+                    style={{
+                        width: '100%',
+                        padding: rem(8),
+                        borderRadius: 'var(--mantine-radius-sm)',
+                        '&:hover': {
+                            backgroundColor: 'var(--mantine-color-default-hover)'
+                        }
+                    }}
+                >
+                    <Group>
+                        <IconSettings size={18} />
+                        <Text size="sm">Settings</Text>
+                    </Group>
+                </UnstyledButton>
+            </Box>
+
+            <SettingsModal opened={settingsOpened} onClose={closeSettings} />
+        </Stack>
     );
 }

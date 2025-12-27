@@ -1,4 +1,4 @@
-import { Container, Text } from '@mantine/core';
+import { Box, Text } from '@mantine/core';
 import { useStore } from '../../store/useStore';
 import { FeedEntry } from '../JournalFeed/FeedEntry';
 
@@ -9,14 +9,14 @@ export function SingleEntryView() {
 
     if (!currentEntry) {
         return (
-            <Container size="md" pt="xl">
+            <Box pt="xl">
                 <Text ta="center" c="dimmed">No entry selected.</Text>
-            </Container>
+            </Box>
         );
     }
 
     return (
-        <Container size="md">
+        <Box>
             <FeedEntry
                 entry={currentEntry}
                 isHighlighted={false}
@@ -24,7 +24,8 @@ export function SingleEntryView() {
                 onSaveGlobal={saveEntry}
                 expanded={true}
                 hideHeader={true}
+                plain={true}
             />
-        </Container>
+        </Box>
     );
 }
