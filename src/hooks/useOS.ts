@@ -9,7 +9,7 @@ export function useOS() {
     useEffect(() => {
         try {
             const currentPlatform = platform();
-            setOs(currentPlatform);
+            setOs(currentPlatform as OSType);
         } catch (error) {
             console.error('Failed to get platform:', error);
             setOs('unknown');

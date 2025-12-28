@@ -1,4 +1,4 @@
-# Journal App
+# InkBloom
 
 A focused, private, and beautifully customizable personal journal application built with **Tauri**, **React**, and **Mantine**.
 

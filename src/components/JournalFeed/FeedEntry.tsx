@@ -91,14 +91,12 @@ export function FeedEntry({ entry, isHighlighted, onSelect, onSaveGlobal, expand
                     <Loader size="sm" type="dots" />
                 </Group>
             ) : (
-                <div>
-                    <Editor
-                        key={entry.filename}
-                        initialContent={content || undefined}
-                        onSave={handleSave}
-                        onFocus={() => onSelect?.(entry)}
-                    />
-                </div>
+                <Editor
+                    key={entry.filename}
+                    initialContent={content || undefined}
+                    onSave={handleSave}
+                    onFocus={() => onSelect?.(entry)}
+                />
             )}
         </Paper>
     );

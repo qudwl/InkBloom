@@ -68,7 +68,7 @@ export function JournalFeed() {
                     {displayedEntries.map(entry => (
                         <div
                             key={entry.filename}
-                            ref={el => entryRefs.current[entry.filename] = el}
+                            ref={el => { entryRefs.current[entry.filename] = el; }}
                         >
                             <FeedEntry
                                 entry={entry}

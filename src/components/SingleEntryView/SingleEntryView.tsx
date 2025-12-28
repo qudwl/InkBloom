@@ -16,16 +16,14 @@ export function SingleEntryView() {
     }
 
     return (
-        <Box>
-            <FeedEntry
-                entry={currentEntry}
-                isHighlighted={false}
-                onSelect={selectEntry}
-                onSaveGlobal={saveEntry}
-                expanded={true}
-                hideHeader={true}
-                plain={true}
-            />
-        </Box>
+        <FeedEntry
+            entry={currentEntry}
+            isHighlighted={false}
+            onSelect={selectEntry}
+            onSaveGlobal={saveEntry}
+            expanded={true}
+            hideHeader={true}
+            plain={true}
+        />
     );
 }

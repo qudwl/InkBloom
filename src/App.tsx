@@ -55,7 +55,6 @@ function App() {
           style={{
             maxWidth: viewMode === 'feed' ? 800 : '100%',
             margin: '0 auto',
-            padding: 'var(--mantine-spacing-md)',
             minHeight: 'calc(100vh - 80px)' // Ensure it fills area
           }}
         >
