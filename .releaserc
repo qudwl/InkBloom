@@ -1,0 +1,32 @@
+{
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "npx tauri version ${nextRelease.version} && cargo fetch --manifest-path src-tauri/Cargo.toml"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "package.json",
+          "package-lock.json",
+          "src-tauri/tauri.conf.json",
+          "src-tauri/Cargo.toml",
+          "src-tauri/Cargo.lock"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]"
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}
